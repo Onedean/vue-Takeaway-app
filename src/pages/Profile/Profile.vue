@@ -95,7 +95,7 @@
   import HeaderTop from '../../components/HeaderTop/HeaderTop.vue'
   import Login from '../Login/Login.vue'
   export default {
-    name: "FooterGuide",
+    name: "Profile",
     components:{
       HeaderTop,
       Login
@@ -107,6 +107,7 @@
   @import "../../common/stylus/mixins.styl"
   .profile //我的
     width 100%
+    overflow hidden
     .header  //头部公共css
       background-color #38B8FF
       position fixed

@@ -11,7 +11,7 @@
 <script>
   import HeaderTop from '../../components/HeaderTop/HeaderTop.vue'
   export default {
-    name: "FooterGuide",
+    name: "Search",
     components:{
       HeaderTop
     }
