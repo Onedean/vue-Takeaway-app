@@ -38,7 +38,7 @@
               </section>
               <section class="login_message">
                 <input type="text" maxlength="11" placeholder="验证码" v-model="captcha">
-                <img class="get_verification" src="http://localhost:4000/captcha" alt="captcha" @click="getCaptcha">
+                <img class="get_verification" src="http://localhost:4000/captcha" alt="captcha" @click="getCaptcha" ref="captcha">
               </section>
             </section>
           </div>
@@ -108,27 +108,55 @@
         }
       },
       // 异步登录
-      login(){
+      async login(){
+        let result
         // 前台表单验证
         if(this.loginWay){  // 短信登录验证
-          const {getColor,code} = this
+          const {getColor,phone,code} = this
           if(!getColor){
             this.showAlert('手机号不正确')
+            return
           }else if(!/^\d{6}/.test(code)){
             this.showAlert('短信验证码不正确')
+            return
           }
+          // 发送ajax请求短信登录
+          result = await reqSmsLogin(phone,code)
         }else{  // 密码登录验证
           const {name,pwd,captcha} = this
           if(!name){
             this.showAlert('手机/邮箱名/用户名不为空')
+            return
           }else if(!pwd){
             this.showAlert('密码不为空')
+            return
           }else if(!captcha){
             this.showAlert('图形验证码不为空')
+            return
           }
+          // 发送ajax请求密码登录
+          result = await reqPwdLogin({name,pwd,captcha})
         }
-        // 登录
+        // 停止计时
+        if(this.computeTime>0){
+          this.computeTime = 0
+          clearInterval(this.intervalId)
+          this.intervalId = undefined
+        }
+        //根据结果进行数据处理
+        if(result.code===0){
+          const user = result.data
+          //将user保存到vuex的state
 
+          //去个人中心界面
+          this.$router.replace('/profile')
+        }else{
+          // 显示新的验证码图片
+          this.getCaptcha()
+          // 显示警告提示
+          const msg = result.msg
+          this.showAlert(msg)
+        }
       },
       // 抽取的弹出警告框方法
       showAlert(alertText){
@@ -141,8 +169,8 @@
         this.alertShow = false
       },
       // 获取图片验证码
-      getCaptcha(event){
-        event.target.src = 'http://localhost:4000/captcha?' + Date.now()
+      getCaptcha(){
+        this.$refs.captcha.src = 'http://localhost:4000/captcha?' + Date.now()
       }
     }
   }
