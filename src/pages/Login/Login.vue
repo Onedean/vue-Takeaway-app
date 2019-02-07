@@ -56,6 +56,7 @@
 
 <script>
   import AlertTip from '../../components/AlertTip/AlertTip.vue'
+  import {reqSmsLogin,reqPwdLogin,reqSendCode} from '../../api'
   export default {
     name: "Login",
     data(){
@@ -82,19 +83,29 @@
     },
     methods:{
       // 异步获取短信验证码
-      getCode(){
+      async getCode(){
         // 启动倒计时
         if(!this.computeTime){
-          this.computeTime = 30
-          const intervalId = setInterval(() => {
+          this.computeTime = 60
+          this.intervalId = setInterval(() => {
             this.computeTime--
             if(this.computeTime <= 0){
-              clearInterval(intervalId)
+              clearInterval(this.intervalId)
             }
           },1000)
         }
         // 发送ajax请求
-
+        const result = await reqSendCode(this.phone)
+        if(result.code===1){
+          // 显示提示
+          this.showAlert('发送验证码失败')
+          // 停止计时
+          if(this.computeTime>0){
+            this.computeTime = 0
+            clearInterval(this.intervalId)
+            this.intervalId = undefined
+          }
+        }
       },
       // 异步登录
       login(){
