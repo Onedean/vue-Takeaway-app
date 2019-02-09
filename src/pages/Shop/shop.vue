@@ -19,7 +19,10 @@
 <script>
   import ShopHeader from '../../components/ShopHeader/ShopHeader.vue'
   export default {
-    name: "Shop.vue",
+    name: "Shop",
+    mounted(){
+      this.$store.dispatch('getShopInfo')
+    },
     components:{
       ShopHeader
     }

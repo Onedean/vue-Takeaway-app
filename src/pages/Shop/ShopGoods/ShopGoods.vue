@@ -6,7 +6,7 @@
 
 <script>
   export default {
-    name: "ShopGoods.vue"
+    name: "ShopGoods"
   }
 </script>
 
