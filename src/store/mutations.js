@@ -1,6 +1,7 @@
 /*
 直接更新state的多个方法的对象
  */
+import Vue from 'vue'
 import {
   RECEIVE_ADDRESS,
   RECEIVE_CATEGORYS,
@@ -9,7 +10,9 @@ import {
   RESET_USER_INFO,
   RECEIVE_GOODS,
   RECEIVE_RATINGS,
-  RECEIVE_INFO
+  RECEIVE_INFO,
+  INCREMENT_FOOD_COUNT,
+  DECREMENT_FOOD_COUNT
 } from './mutation-types'
 
 export default {
@@ -35,7 +38,20 @@ export default {
   [RECEIVE_RATINGS](state,{ratings}){
     state.ratings = ratings
   },
-  [RECEIVE_INFO](state,{info}) {
+  [RECEIVE_INFO](state,{info}){
     state.info = info
+  },
+
+  [INCREMENT_FOOD_COUNT](state,{food}){
+    if(!food.count){
+      Vue.set(food,'count',1)  // 通过vue中的set()方法给新增的数据增加数据绑定效果，否则不会有数据绑定的效果
+    }else{
+      food.count++
+    }
+  },
+  [DECREMENT_FOOD_COUNT](state,{food}){
+    if(food.count){
+      food.count--
+    }
   }
 }

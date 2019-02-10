@@ -32,7 +32,7 @@
                     <span class="old" v-if="food.oldPrice">¥{{food.oldPrice}}</span>
                   </div>
                   <div class="cartcontrol-wrapper">
-                    CartControl
+                    <CartControl :food="food"/>
                   </div>
                 </div>
               </li>
@@ -47,6 +47,7 @@
 <script>
   import BScroll from 'better-scroll'
   import {mapState} from 'vuex'
+  import CartControl from '../../../components/CartControl/CartControl.vue'
   export default {
     name: "ShopGoods",
     data(){
@@ -114,7 +115,6 @@
         this.tops = tops
       },
       clickMenuItem(index){
-        console.log(index)
         // 得到目标位置的scrollY
         const scrollY = this.tops[index]
         // 立即更新scrollY，使得左侧列表不会受scrollEnd监听的影响反应延缓
@@ -122,6 +122,9 @@
         // 使右侧列表平缓滑动到指定位置
         this.foodsScroll.scrollTo(0,-scrollY,300,)
       }
+    },
+    components:{
+      CartControl
     }
   }
 </script>
