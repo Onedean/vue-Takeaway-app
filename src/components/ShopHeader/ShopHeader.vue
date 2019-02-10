@@ -1,9 +1,9 @@
 <template>
   <div class="shop-header">
     <nav class="shop-nav" :style="{backgroundImage: `url(${info.bgImg})`}">
-      <a class="back" @click="$router.back()">
+      <router-link class="back" to="/msite">
         <i class="iconfont icon-jiantou4"></i>
-      </a>
+      </router-link>
     </nav>
     <div class="shop-content" @click="toggleShopShow">
       <img class="content-image" :src="info.avatar">
