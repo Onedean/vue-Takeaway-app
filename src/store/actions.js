@@ -84,11 +84,13 @@ export default {
     }
   },
   // 异步获取商家评价
-  async getRatings({commit}){
+  async getRatings({commit},callBack){
     const result = await reqShopRatings()
     if(result.code === 0){
       const ratings = result.data
       commit(RECEIVE_RATINGS,{ratings})
+      // 回调函数，数据更新后通知组件
+      callBack && callBack()
     }
   },
   // 异步获取商家信息
