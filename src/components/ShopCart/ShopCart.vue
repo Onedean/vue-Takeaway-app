@@ -22,7 +22,7 @@
         <div class="shopcart-list" v-show="listShow">
           <div class="list-header">
             <h1 class="title">购物车</h1>
-            <span class="empty" @click="clearShop">清空</span>
+            <span class="empty" @click="clearCart">清空</span>
           </div>
           <div class="list-content">
             <ul>
@@ -43,6 +43,8 @@
 </template>
 
 <script>
+  import { MessageBox } from 'mint-ui'
+  import BScroll from 'better-scroll'
   import CartControl from "../CartControl/CartControl";
   import {mapState,mapGetters} from 'vuex'
   export default {
@@ -75,6 +77,18 @@
           this.isShow = false
           return false
         }
+        if(this.isShow){
+          this.$nextTick(() => {
+            // 实现BScroll的实例是一个单例模式，防止多次添加的bug
+            if(!this.scroll){
+              this.scroll = new BScroll('.list-content',{
+                click:true
+              })
+            }else{
+              this.scroll.refresh()  // 让滚动条刷新一下，重新统计内容区高度，防止第一次加载时不能滑动的bug（现在BScroll库这个bug应该解决了）
+            }
+          })
+        }
         return this.isShow
       }
     },
@@ -84,8 +98,10 @@
           this.isShow = !this.isShow
         }
       },
-      clearShop(){
-
+      clearCart(){
+        MessageBox.confirm('您确定要清空购物车吗?').then(action => {
+          this.$store.dispatch('clearCart')
+        },() => {});
       }
     }
   }
