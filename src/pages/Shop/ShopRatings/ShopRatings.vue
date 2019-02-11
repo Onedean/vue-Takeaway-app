@@ -73,7 +73,7 @@
 
 <script>
   import BScroll from 'better-scroll'
-  import Star from '../../../components/star/Star.vue'
+  import Star from '../../../components/Star/Star.vue'
   import {mapState,mapGetters} from 'vuex'
   export default {
     name: "ShopRatings",
