@@ -16,7 +16,7 @@
           <li class="food-list food-list-hook"  v-for="(good,index) in goods" :key="index">
             <h1 class="title">{{good.name}}</h1>
             <ul>
-              <li class="food-item bottom-border-1px" v-for="(food,index) in good.foods" :key="index">
+              <li class="food-item bottom-border-1px" v-for="(food,index) in good.foods" :key="index" @click="showFood(food)">
                 <div class="icon">
                   <img width="57" height="57" :src="food.icon">
                 </div>
@@ -40,7 +40,9 @@
           </li>
         </ul>
       </div>
+      <ShopCart/>
     </div>
+    <Food :food="food" ref="food"/>
   </div>
 </template>
 
@@ -48,12 +50,15 @@
   import BScroll from 'better-scroll'
   import {mapState} from 'vuex'
   import CartControl from '../../../components/CartControl/CartControl.vue'
+  import Food from '../../../components/Food/Food.vue'
+  import ShopCart from '../../../components/ShopCart/ShopCart.vue'
   export default {
     name: "ShopGoods",
     data(){
       return {
         scrollY:0,  // 右侧滑动的Y轴坐标
-        tops:[]  // 所有右侧分类li的top组成的数组（列表第一次显示后就不变化）
+        tops:[],  // 所有右侧分类li的top组成的数组（列表第一次显示后就不变化）
+        food:{}
       }
     },
     mounted(){
@@ -114,6 +119,7 @@
         // 3.更新数据
         this.tops = tops
       },
+      //点击左侧更新右侧位置
       clickMenuItem(index){
         // 得到目标位置的scrollY
         const scrollY = this.tops[index]
@@ -121,10 +127,17 @@
         this.scrollY = scrollY
         // 使右侧列表平缓滑动到指定位置
         this.foodsScroll.scrollTo(0,-scrollY,300,)
+      },
+      // 切换food组件的显示和隐藏
+      showFood(food){
+        this.food = food
+        this.$refs.food.toggleShow()  // 父组件调用子组件的方法
       }
     },
     components:{
-      CartControl
+      CartControl,
+      Food,
+      ShopCart
     }
   }
 </script>
