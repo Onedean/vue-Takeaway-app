@@ -62,7 +62,7 @@
                 <span class="iconfont" :class="rating.rateType===0 ? 'icon-zan' : 'icon-cai'"></span>
                 <span class="item" v-for="(item,index) in rating.recommend" :key="index">{{item}}</span>
               </div>
-              <div class="time">{{getTime(rating.rateTime)}}</div>
+              <div class="time">{{rating.rateTime | data-format}}</div>
             </div>
           </li>
         </ul>
@@ -113,18 +113,6 @@
            */
           return (selectType===2 || selectType===rateType) && (!onlyShowText || text.length>0)
         })
-      }
-    },
-    methods:{
-      getTime(val){
-        if (val != null) {
-          const date = new Date(val);
-          //月份为0-11，所以+1，月份小于10时补个0
-          const month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
-          const currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-          return date.getFullYear() + "-" + month + "-" + currentDate;
-        }
-        return "";
       }
     },
     components:{
